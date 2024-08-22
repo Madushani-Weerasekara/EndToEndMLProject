@@ -1,0 +1,4 @@
+pandas
+numpy
+
+-e. # This will automatically trigger requirements.txt file
