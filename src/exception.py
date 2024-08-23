@@ -1,5 +1,5 @@
 import sys # track error details
-from .logger import logging
+from .logger import logging #  import logger.py into exception.py
 
 
 def error_message_detail(error,error_detail:sys):
