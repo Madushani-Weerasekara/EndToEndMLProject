@@ -1,7 +1,0 @@
-pandas
-numpy
-seaborn
-matplotlib
-
-
-#-e. # This will automatically trigger requirements.txt file
