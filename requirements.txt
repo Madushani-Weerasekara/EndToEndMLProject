@@ -2,6 +2,9 @@ pandas
 numpy
 seaborn
 matplotlib
+scikit-learn
+catboost
+xgboost
 
 
 #-e. # This will automatically trigger requirements.txt file
