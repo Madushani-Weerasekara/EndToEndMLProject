@@ -5,6 +5,7 @@ matplotlib
 scikit-learn
 catboost
 xgboost
+dill
 
 
 #-e. # This will automatically trigger requirements.txt file

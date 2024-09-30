@@ -1,15 +1,23 @@
 # Will have all the code reladed to reading the data
 # devide the dataset into train and test
 # create a validation data
-
+ 
 import os
 import sys
+
+# Add the parent directory to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 
 @dataclass
 class DataIngestionConfig:
@@ -25,10 +33,13 @@ class DataIngestion:
         )
         
     def initiate_data_ingestion(self):
+
         logging.info("Entered the data ingestion method or component")
+        
         try:
-            
-            df = pd.read_csv('notebook/data/exams_performance.csv')
+            data_file_path = os.path.join(os.getcwd(), 'src','notebook', 'data', 'exams_performance.csv')
+            df = pd.read_csv(data_file_path)
+
             logging.info("Read the dataset as dataframe")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
@@ -50,11 +61,16 @@ class DataIngestion:
             raise CustomException(e,sys)
         
 if __name__ == "__main__":
+    # Combine data ingestion
     obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data, test_data = obj.initiate_data_ingestion() # when done obj.initiate_data_ingestion() will return two values(train_data and test_data)
+
+    # Combine data transformation
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data, test_data)
 
 
-    
+
 
 
 
