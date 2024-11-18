@@ -14,14 +14,13 @@ from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import ColumnTransformer # Used to create the pipeline
+from sklearn.impute import SimpleImputer # Handling missing values
+from sklearn.pipeline import Pipeline 
+from sklearn.preprocessing import OneHotEncoder, StandardScaler 
 
-from src.exception import CustomException
-from src.logger import logging
-from src.exception import CustomException
+from src.exception import CustomException # Exception handling
+from src.logger import logging 
  
 
 from src.utils import save_object
@@ -75,7 +74,7 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
         
-    def initiate_data_transformation(self, train_path, test_path):
+    def initiate_data_transformation(self, train_path, test_path): # Getting train_path & test_path from data_ingestion
         try:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
@@ -84,7 +83,7 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing object")
 
-            preprocessing_obj = self.get_data_transformer_object()
+            preprocessing_obj = self.get_data_transformer_object() 
 
             target_column_name = "math score"
             numerical_columns = ["writing score", "reading score"]
