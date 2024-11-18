@@ -113,8 +113,13 @@ class DataTransformation:
 
             # Saving the pickle file
             save_object(
-                file_path = self.DataTransformationconfig.preprocessor_obj_file_path,
+                file_path = self.DataTransformationconfig.preprocessor_obj_file_path, 
                 obj = preprocessing_obj
+            )
+            return(
+                train_arr,
+                test_arr,
+                self.DataTransformationconfig.preprocessor_obj_file_path
             )
         except Exception as e:
             raise CustomException(e,sys)

@@ -9,8 +9,35 @@ import sys
 import numpy as np
 import pandas as pd
 import dill # Library that will help to create the pickle file
+from sklearn.metrics import r2_score
 
 from src.exception import CustomException
+
+def evaluate_models(x_train, y_train, x_test, y_test, models):
+    try:
+        report = {}
+
+        for model_name, model in models.items():
+            try:
+
+                model.fit(x_train, y_train) # Train model
+                 
+                y_train_pred = model.predict(x_train)
+                y_test_pred = model.predict(x_test)
+
+                train_model_score = r2_score(y_train, y_train_pred)
+
+                test_model_score = r2.score(y_test, y_test_pred)
+            except Exception as e:
+                print(f"Model {model_name} failed with error {e}")
+
+             
+ 
+             
+        return report
+    
+    except:
+        pass
 
 def save_object(file_path, obj):
     try:
