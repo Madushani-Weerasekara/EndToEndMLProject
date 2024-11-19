@@ -27,7 +27,7 @@ def evaluate_models(x_train, y_train, x_test, y_test, models):
 
                 train_model_score = r2_score(y_train, y_train_pred)
 
-                test_model_score = r2.score(y_test, y_test_pred)
+                test_model_score = r2_score(y_test, y_test_pred)
             except Exception as e:
                 print(f"Model {model_name} failed with error {e}")
 

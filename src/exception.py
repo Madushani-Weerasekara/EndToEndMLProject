@@ -1,7 +1,8 @@
+
 import sys # track error details
 from .logger import logging #  import logger.py into exception.py
 
-
+"""
 def error_message_detail(error,error_detail:sys):
     _,_,exc_tb=error_detail.exc_info()
     file_name=exc_tb.tb_frame.f_code.co_filename
@@ -27,3 +28,22 @@ if __name__=="__main__":
         logging.info("Divide by zero error")
         raise CustomException(e, sys)
    
+"""
+
+class CustomException(Exception):
+    def __init__(self, error_message, error_detail):
+        self.error_message = self.error_message_detail(error_message, error_detail)
+
+    def error_message_detail(self, error_message, error_detail):
+        try:
+            # Check if error_detail (traceback) exists
+            if error_detail:
+                exc_type, exc_value, exc_tb = error_detail.exc_type, error_detail.exc_value, error_detail.exc_tb
+                file_name = exc_tb.tb_frame.f_code.co_filename
+                line_number = exc_tb.tb_lineno
+                return f"Error occurred in script {file_name} at line {line_number}. Error message: {str(exc_value)}"
+            else:
+                return f"Error: {str(error_message)}"
+        except Exception as e:
+            # If there's another problem, just show a general message
+            return f"Error occurred: {str(e)}"

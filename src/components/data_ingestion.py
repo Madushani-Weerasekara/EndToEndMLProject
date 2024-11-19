@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
+import numpy as np
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
@@ -28,6 +29,7 @@ class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts', "train.csv")
     test_data_path: str=os.path.join('artifacts', "test.csv")
     raw_data_path: str=os.path.join('artifacts', "data.csv")
+
 
 class DataIngestion:
     def __init__(self):
@@ -61,20 +63,27 @@ class DataIngestion:
 
 
         except Exception as e:
+            logging.info(f"An error occured. {str(e)}")
             raise CustomException(e,sys)
         
 if __name__ == "__main__":
     # Combine data ingestion
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion() # when done obj.initiate_data_ingestion() will return two values(train_data and test_data)
+    
+     
 
     # Combine data transformation
     data_transformation = DataTransformation()
     train_arr, test_arr, preprocessor_path = data_transformation.initiate_data_transformation(train_data, test_data)
 
-    modeltrainer = ModelTrainer
-    print(modeltrainer.initiate_model_trainer(train_arr, test_arr, preprocessor_path))
+    # Add this validation step
+    if train_arr.size == 0 or test_arr.size == 0:
+        raise CustomException("Transformed training or test data is empty. Check data transformation process.", sys)
 
+    modeltrainer = ModelTrainer()
+    r2_score = modeltrainer.initiate_model_trainer(train_arr, test_arr, preprocessor_path)
+    # print(f"r2 Score : {r2_score}")
 
 
 
