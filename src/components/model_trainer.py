@@ -6,6 +6,7 @@ import os
 import sys
 from dataclasses import dataclass
 
+
 from catboost import CatBoostRegressor
 from sklearn.ensemble import(
     AdaBoostRegressor,
@@ -23,10 +24,14 @@ from src.exception import CustomException
 from src.logger import logging
 
 from src.utils import save_object, evaluate_models
+ 
+
+# Add the parent directory to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_path = os.path.join("artifacts", "model.pkl")
+    trained_model_file_path = os.path.join ("artifacts", "model.pkl")
 
 class ModelTrainer: # Responsible for model training
     def __init__(self):
@@ -54,10 +59,10 @@ class ModelTrainer: # Responsible for model training
                 "Decision Tree": DecisionTreeRegressor(),
                 "Gradient Boosting": GradientBoostingRegressor(),
                 "Linear Regression": LinearRegression(),
-                "K-Neighbors Classifier" : KNeighborsRegressor(),
-                "XGBClassifier": XGBRegressor(),
-                "CatBoostingClassifier": CatBoostRegressor(verbose=False),
-                "AdaBoost Classifier" : AdaBoostRegressor()
+                "K-Neighbors Regressor" : KNeighborsRegressor(),
+                "XGBRegressor": XGBRegressor(),
+                "CatBoostingRegressor": CatBoostRegressor(verbose=False),
+                "AdaBoost Regressor" : AdaBoostRegressor()
 
             }
 
@@ -69,7 +74,7 @@ class ModelTrainer: # Responsible for model training
                 },
 
                 "Random Forest": {
-                    # 'criterian': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    # 'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
                     # 'max_features': ['sqrt', 'log2', None],
                     'n_estimators': [8, 16, 32, 64, 128, 256]
                 },
@@ -78,7 +83,7 @@ class ModelTrainer: # Responsible for model training
                     # 'loss': ['squared_error', 'huber', 'absolute_error', 'quantile'],
                     'learning_rate': [.1, .01, .05, .001],
                     'subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
-                    # 'criterian': ['squared_error' , 'friedman_mse'],
+                    # 'criterion': ['squared_error' , 'friedman_mse'],
                     # 'max_features': ['auto', 'sqrt', 'log2'],
                     'n_estimators': [8, 16, 32, 64, 128,256]
 
@@ -91,7 +96,7 @@ class ModelTrainer: # Responsible for model training
                     'n_estimators': [8, 16, 32, 64, 128, 256]
                 },
 
-                "CatBoosting Regressor": {
+                "CatBoostingRegressor": {
                     'depth': [6, 8, 10],
                     'learning_rate': [0.01, 0.05, 0.1],
                     'iterations': [30, 50, 100]
@@ -100,13 +105,15 @@ class ModelTrainer: # Responsible for model training
                 "AdaBoost Regressor": {
                     'learning_rate': [.1, .01, 0.5, .001],
                     # 'loss': ['linear', 'square', 'exponential'],
-                    'n_estimator': [8, 16, 32, 64, 128, 256]
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
                 }
             }
                  
 
             # Evaluate models
             model_report:dict = evaluate_models(x_train, y_train, x_test, y_test, models, param=params)
+            # model_report:dict = self.evaluate_models(x_train, y_train, x_test, y_test, models, param=params)
+
 
              
             
@@ -125,17 +132,19 @@ class ModelTrainer: # Responsible for model training
 
             # Save the best model
             save_object(
-                file_path=self.model_trainer_config.trained_model_file_path,
+                file_path=self.ModelTrainerConfig.trained_model_file_path,
                 obj = best_model
             )
 
-            logging.info(f"Saved the best model: {best_model_name} to {self.model_trainer_config.trained_model_file_path}")
+            logging.info(f"Saved the best model: {best_model_name} to {self.ModelTrainerConfig.trained_model_file_path} with R2 score : {best_model_score}")
              
             # Predict on test data and calculate R² score
-            predicted = best_model.predict(x_test)
+            # predicted = best_model.predict(x_test)
 
-            r2_square = r2_score(y_test, predicted)
-            return r2_square
+            # r2 = r2_score(y_test, predicted)
+
+            return r2_score(y_test, best_model.predict(x_test))
+             
         
         except Exception as e:
             raise CustomException(e, sys)
