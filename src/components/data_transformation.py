@@ -2,7 +2,7 @@
 # How to convert castegorical featuers into neumerical
 # How to handle One Hot Encoding
 # How to handle labele encoding
-
+ 
 import os
 import sys
 
@@ -123,4 +123,4 @@ class DataTransformation:
             )
         except Exception as e:
             raise CustomException(e,sys)
-        
+     

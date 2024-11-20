@@ -16,6 +16,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
 
@@ -84,7 +85,4 @@ if __name__ == "__main__":
     modeltrainer = ModelTrainer()
     r2_score = modeltrainer.initiate_model_trainer(train_arr, test_arr, preprocessor_path)
     # print(f"r2 Score : {r2_score}")
-
-
-
-
+ 

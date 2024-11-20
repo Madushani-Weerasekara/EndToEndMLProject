@@ -10,14 +10,25 @@ import numpy as np
 import pandas as pd
 import dill # Library that will help to create the pickle file
 from sklearn.metrics import r2_score
+from sklearn.model_selection import GridSearchCV
 
 from src.exception import CustomException
 
-def evaluate_models(x_train, y_train, x_test, y_test, models):
+def evaluate_models(x_train, y_train, x_test, y_test, models, param):
     try:
         report = {}
 
         for model_name, model in models.items():
+
+            model = list(models.values())[model_name]
+            para=param[list(models.keys())[model_name]]
+
+            
+            gs = GridSearchCV(model,para,cv=3)
+            gs.fit(x_train,y_train)
+
+            model.set_params(**gs.best_params_)
+            model.fit(x_train,y_train)
             try:
 
                 model.fit(x_train, y_train) # Train model
